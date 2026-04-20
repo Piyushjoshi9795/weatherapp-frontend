@@ -2,20 +2,22 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'http://localhost:5000/api',
+  // Use relative path /api which Nginx proxies to backend:5000
+  // This works both in Docker (proxied by Nginx) and local dev
+  baseURL: '/api',
   withCredentials: true // sends cookies (refresh token) automatically
 });
 
 // ── Request interceptor ───────────────────────────────────
 // Runs before every request — attaches the access token
-api.interceptors.request.use((config) => {
+api.interceptors.request.use((config) => { // interceptors allow us to run code before a request is sent or after a response is received. Here, we use a request interceptor to automatically attach the access token to the Authorization header of every outgoing request. This way, we don't have to manually add the token every time we call an API endpoint. The interceptor checks localStorage for the access token and, if it exists, adds it to the headers in the format "Bearer <token>". This ensures that our backend can authenticate the user for protected routes.
   const token = localStorage.getItem('accessToken');
   // Wait — why localStorage here if we said it's insecure?
   // Access tokens are SHORT-LIVED (15 min). Even if stolen,
   // they expire fast. The sensitive refresh token is in HttpOnly cookie.
   // This is the accepted trade-off for SPAs.
   if (token) {
-    config.headers['Authorization'] = `Bearer ${token}`;
+    config.headers['Authorization'] = `Bearer ${token}`; // 
   }
   return config;
 });
