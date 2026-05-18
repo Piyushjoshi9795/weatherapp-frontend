@@ -4,7 +4,7 @@ import axios from 'axios';
 const api = axios.create({
   // Use relative path /api which Nginx proxies to backend:5000
   // This works both in Docker (proxied by Nginx) and local dev
-  baseURL: '/api',
+  baseURL: 'https://weather-application-backend-rho.vercel.app/api',
   withCredentials: true // sends cookies (refresh token) automatically
 });
 
