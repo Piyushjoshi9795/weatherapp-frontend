@@ -1,5 +1,5 @@
 // src/pages/Weather.jsx
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import api from '../api/axiosInstance';
 
@@ -29,7 +29,6 @@ export default function Weather() {
   const [weather, setWeather] = useState(null);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const [suggestions, setSuggestions] = useState([]);
   const [savedCity, setSavedCity] = useState('');
   const { user, logout } = useAuth();
 
